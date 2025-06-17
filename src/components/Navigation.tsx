@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Menu, X, LogOut, Moon, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -23,20 +22,19 @@ const Navigation = () => {
     }
   }, []);
 
-  const scrollToSection = (sectionId: string) => {
-    // Check if we're on the home page
+  const scrollToSection = (sectionId: string, targetPath: string = '/home') => {
     const currentPath = window.location.pathname;
-    if (currentPath !== '/home') {
-      // Navigate to home page first, then scroll
-      navigate('/home');
+
+    if (currentPath !== targetPath) {
+      navigate(targetPath);
       setTimeout(() => {
         const element = document.getElementById(sectionId);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      }, 100);
+      }, 100); // Small delay to allow navigation to complete
     } else {
-      // Already on home page, just scroll
+      // Already on the target path, just scroll
       const element = document.getElementById(sectionId);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
@@ -56,12 +54,13 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { name: 'Home', action: () => scrollToSection('home') },
-    { name: 'About', action: () => scrollToSection('about') },
-    { name: 'Activities', action: () => scrollToSection('activities') },
-    { name: 'Gallery', action: () => scrollToSection('testimonials') },
-    { name: 'Location', action: () => scrollToSection('location') },
-    { name: 'Contact', action: () => scrollToSection('contact') }
+    { name: 'Home', action: () => scrollToSection('home', '/home') },
+    { name: 'About', action: () => scrollToSection('about', '/home') },
+    { name: 'Activities', action: () => scrollToSection('activities', '/home') },
+    { name: 'DIY Kits', action: () => scrollToSection('shop-diy-kits', '/home') },
+    { name: 'Gallery', action: () => scrollToSection('testimonials', '/home') },
+    { name: 'Location', action: () => scrollToSection('location', '/home') },
+    { name: 'Contact', action: () => scrollToSection('contact', '/home') }
   ];
 
   const handleBookNow = () => {
@@ -80,7 +79,7 @@ const Navigation = () => {
 
   return (
     <nav className="fixed top-0 w-full bg-purple-600 dark:bg-gray-900 z-50 shadow-lg">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+      <div className="max-w-7xl mx-auto px-0 sm:px-2 lg:px-4">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left side - Logo and Know How */}
           <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0 min-w-0">

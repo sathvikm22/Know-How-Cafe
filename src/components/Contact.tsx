@@ -21,10 +21,6 @@ const Contact = () => {
           TELLS A STORY
         </h2>
         
-        <p className="text-lg sm:text-xl text-white/90 mb-2 sm:mb-4">
-          TO ADD A SMILE
-        </p>
-        
         <p className="text-base sm:text-lg lg:text-xl text-white/90 mb-8 sm:mb-10 lg:mb-12 max-w-2xl mx-auto px-2">
           Ready to start your creative journey? We're here to help you discover 
           the perfect workshop for your artistic adventure.

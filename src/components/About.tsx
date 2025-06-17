@@ -1,4 +1,3 @@
-
 const About = () => {
   return (
     <section id="about" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-orange-100 via-pink-100 to-blue-100 relative">
@@ -16,22 +15,22 @@ const About = () => {
             <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4">
               <div className="rounded-2xl sm:rounded-3xl overflow-hidden h-32 sm:h-40 lg:h-48 transform hover:scale-105 transition-transform duration-300 relative">
                 <img 
-                  src="/lovable-uploads/58a6ea81-e970-4f76-91c6-310e164750bb.png" 
-                  alt="Stuffed Toys"
+                  src="/lovable-uploads/td.png" 
+                  alt="Plushie heaven"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-2 sm:p-3 lg:p-4">
-                  <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg">Stuffed Toys</h3>
+                  <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg">Plushie heaven</h3>
                 </div>
               </div>
               <div className="rounded-2xl sm:rounded-3xl overflow-hidden h-32 sm:h-40 lg:h-48 transform hover:scale-105 transition-transform duration-300 mt-4 sm:mt-6 lg:mt-8 relative">
                 <img 
                   src="/lovable-uploads/684d6c8c-1895-47c7-b7be-e2d7a44e6c96.png" 
-                  alt="Leather Diaries"
+                  alt="noted"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-2 sm:p-3 lg:p-4">
-                  <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg">Leather Diaries</h3>
+                  <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg">Noted</h3>
                 </div>
               </div>
               <div className="rounded-2xl sm:rounded-3xl overflow-hidden h-32 sm:h-40 lg:h-48 transform hover:scale-105 transition-transform duration-300 -mt-4 sm:-mt-6 lg:-mt-8 relative">
@@ -47,11 +46,11 @@ const About = () => {
               <div className="rounded-2xl sm:rounded-3xl overflow-hidden h-32 sm:h-40 lg:h-48 transform hover:scale-105 transition-transform duration-300 relative">
                 <img 
                   src="/lovable-uploads/887b2e15-4db6-4df9-abf1-52f7eb21589b.png" 
-                  alt="Phone Cases"
+                  alt="protector"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-20 flex items-end p-2 sm:p-3 lg:p-4">
-                  <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg">Phone Cases</h3>
+                  <h3 className="font-semibold text-white text-sm sm:text-base lg:text-lg">Protector</h3>
                 </div>
               </div>
             </div>

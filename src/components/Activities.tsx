@@ -33,41 +33,44 @@ const Activities = () => {
       color: "from-orange-300 via-green-300 to-teal-300"
     },
     {
-      name: "Leather Diaries",
-      description: "Hand-bind your own leather journals and notebooks",
+      name: "Noted",
+      description: "Design your own dream leather diary",
       emoji: "📖",
       image: "/lovable-uploads/d7cfafb7-f6d1-4e5d-9531-63ee12b1e49d.png",
       color: "from-pink-300 via-red-300 to-orange-300"
     },
     {
-      name: "Phone Cases",
-      description: "Design and create personalized phone accessories",
+      name: "Protector",
+      description: "Create your own vibey phone case",
       emoji: "📱",
       image: "/lovable-uploads/09ae03f1-4482-4d23-90bf-660795747349.png",
       color: "from-blue-300 via-indigo-300 to-purple-300"
     },
     {
-      name: "Stuffed Toys",
-      description: "Sew adorable plush companions from start to finish",
+      name: "Plushie heaven",
+      description: "Craft your plushie buddy from scratch",
       emoji: "🧸",
       image: "/lovable-uploads/0e6eee87-afef-4104-9ec6-b5fed2735365.png",
       color: "from-green-300 via-emerald-300 to-teal-300"
     },
     {
-      name: "Fridge Magnets",
-      description: "Create colorful and fun magnets for your refrigerator",
+      name: "Magnetic world",
+      description: "Customize fridge magnets with love",
       emoji: "🧲",
       image: "/lovable-uploads/6619328f-c411-46c0-b5cc-d0c0328c45bc.png",
       color: "from-purple-300 via-pink-300 to-red-300"
+    },
+    {
+      name: "Retro Writes",
+      description: "Craft heartfelt messages and beautiful calligraphy",
+      emoji: "✍️",
+      image: "/lovable-uploads/letter_writing_retro.png",
+      color: "from-gray-300 via-blue-300 to-indigo-300"
     }
   ];
 
   const handleBookWorkshop = (activityName: string) => {
     navigate(`/booking?activity=${encodeURIComponent(activityName)}`);
-  };
-
-  const handleViewAllActivities = () => {
-    navigate('/activities');
   };
 
   return (
@@ -109,15 +112,6 @@ const Activities = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="text-center">
-          <button 
-            onClick={handleViewAllActivities}
-            className="bg-gradient-to-r from-green-500 via-blue-500 to-purple-500 text-white px-8 py-4 rounded-full font-medium text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-          >
-            VIEW ALL ACTIVITIES
-          </button>
         </div>
       </div>
     </section>

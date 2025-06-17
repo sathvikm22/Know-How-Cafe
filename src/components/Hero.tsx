@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowRight, Sparkles, Heart, Users, Calendar, Palette, Brush, Scissors, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +6,7 @@ const Hero = () => {
   const navigate = useNavigate();
 
   const handleStartCreating = () => {
-    navigate('/activities');
+    document.getElementById('activities')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleExploreActivities = () => {
@@ -89,24 +88,17 @@ const Hero = () => {
             </h1>
             
             <p className="text-2xl md:text-3xl text-gray-700 dark:text-gray-300 mb-12 max-w-3xl mx-auto animate-fade-in leading-relaxed" style={{animationDelay: '0.3s'}}>
-              Discover the joy of hands-on creativity in our vibrant studio. 
-              From tufting to pottery, every experience tells a story.
+              Discover the joy of hands-on creativity in our vibrant studio 
+              From art to craft, every experience tells a story
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 animate-fade-in" style={{animationDelay: '0.6s'}}>
+            <div className="flex justify-center mb-16 animate-fade-in" style={{animationDelay: '0.6s'}}>
               <button 
                 onClick={handleStartCreating}
                 className="group bg-pink-500 text-white px-12 py-6 rounded-full font-semibold text-xl hover:shadow-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3"
               >
                 <span>Start Creating</span>
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-              </button>
-              
-              <button 
-                onClick={handleExploreActivities}
-                className="border-3 border-blue-500 text-blue-600 dark:text-blue-400 px-12 py-6 rounded-full font-semibold text-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-300"
-              >
-                Explore Activities
               </button>
             </div>
 
