@@ -9,30 +9,21 @@ const Testimonials = () => {
   const [api, setApi] = useState<any>()
 
   const galleryImages = [
-    {
-      src: "/lovable-uploads/69a6f874-417c-4128-b682-e4614101080c.png",
-      alt: "Art studio with paintbrushes hanging from ceiling"
-    },
-    {
-      src: "/lovable-uploads/235567bf-79a2-4bdb-80b4-086434af6897.png", 
-      alt: "Creative workspace with colorful cushions"
-    },
-    {
-      src: "/lovable-uploads/28f161cc-8da8-47f8-9a46-8191dc3dcbad.png",
-      alt: "Craft making workspace with supplies"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=400&fit=crop",
-      alt: "Pottery workshop with clay work"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop",
-      alt: "Art supplies and painting materials"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1572602206002-ac90088b7b2b?w=400&h=400&fit=crop",
-      alt: "Creative art studio space"
-    }
+    { src: "/lovable-uploads/1.jpeg", alt: "Gallery image 1" },
+    { src: "/lovable-uploads/2.jpeg", alt: "Gallery image 2" },
+    { src: "/lovable-uploads/3.jpeg", alt: "Gallery image 3" },
+    { src: "/lovable-uploads/4.jpeg", alt: "Gallery image 4" },
+    { src: "/lovable-uploads/5.jpeg", alt: "Gallery image 5" },
+    { src: "/lovable-uploads/6.jpeg", alt: "Gallery image 6" },
+    { src: "/lovable-uploads/7.jpeg", alt: "Gallery image 7" },
+    { src: "/lovable-uploads/8.jpeg", alt: "Gallery image 8" },
+    { src: "/lovable-uploads/9.jpeg", alt: "Gallery image 9" },
+    { src: "/lovable-uploads/10.jpeg", alt: "Gallery image 10" },
+    { src: "/lovable-uploads/11.jpeg", alt: "Gallery image 11" },
+    { src: "/lovable-uploads/12.jpeg", alt: "Gallery image 12" },
+    { src: "/lovable-uploads/13.jpeg", alt: "Gallery image 13" },
+    { src: "/lovable-uploads/14.jpeg", alt: "Gallery image 14" },
+    { src: "/lovable-uploads/15.jpeg", alt: "Gallery image 15" },
   ];
 
   useEffect(() => {
@@ -78,13 +69,14 @@ const Testimonials = () => {
             >
               <CarouselContent className="-ml-4">
                 {galleryImages.map((image, index) => (
-                  <CarouselItem key={index} className="pl-4 basis-2/3 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 2xl:basis-1/5">
-                    <div className="p-2">
-                      <div className="aspect-square overflow-hidden rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-700 transform hover:scale-105 bg-white">
+                  <CarouselItem key={index} className="pl-4 basis-4/5 md:basis-2/3 lg:basis-1/2 xl:basis-2/5 2xl:basis-1/3">
+                    <div className="p-4">
+                      <div className="aspect-[4/3] overflow-hidden rounded-3xl shadow-2xl border-2 border-cyan-200 bg-white hover:shadow-pink-300 transition-all duration-700 transform hover:scale-105">
                         <img
                           src={image.src}
                           alt={image.alt}
-                          className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110"
+                          className={`w-full h-full object-cover transition-transform duration-1000 hover:scale-110${image.src.includes('9.jpeg') || image.src.includes('15.jpeg') ? '' : ''}`}
+                          style={image.src.includes('9.jpeg') || image.src.includes('15.jpeg') ? { objectPosition: 'center 70%' } : {}}
                           loading="lazy"
                         />
                       </div>

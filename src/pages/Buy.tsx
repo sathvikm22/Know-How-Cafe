@@ -130,7 +130,7 @@ const Buy = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
       <Navigation />
-      <div className="container mx-auto px-4 py-6 sm:py-8 pt-32">
+      <div className="container mx-auto px-4 py-6 sm:py-8 pt-48 mt-14">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8">
@@ -221,7 +221,6 @@ const Buy = () => {
                   </div>
 
                   <Button
-                    onClick={handlePurchase}
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm sm:text-base mt-4"
                     size="lg"
                     disabled={!selectedPaymentMethod}
@@ -235,7 +234,7 @@ const Buy = () => {
           </div>
 
           {/* Add-ons Section */}
-          <div className="mt-8">
+          <div className="mt-12">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6">Add More DIY Kits</h2>
             <div className="relative flex items-center">
               <Button

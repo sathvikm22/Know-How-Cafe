@@ -57,6 +57,7 @@ const Navigation = () => {
     { name: 'Home', action: () => scrollToSection('home', '/home') },
     { name: 'About', action: () => scrollToSection('about', '/home') },
     { name: 'Activities', action: () => scrollToSection('activities', '/home') },
+    { name: 'Events', action: () => scrollToSection('events-section', '/home') },
     { name: 'DIY Kits', action: () => scrollToSection('shop-diy-kits', '/home') },
     { name: 'Gallery', action: () => scrollToSection('testimonials', '/home') },
     { name: 'Location', action: () => scrollToSection('location', '/home') },
