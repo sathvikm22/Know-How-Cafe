@@ -199,32 +199,9 @@ const Buy = () => {
                     <span className="text-orange-600">₹{totalPrice}</span>
                   </div>
 
-                  {/* Payment Method Section */}
-                  <div className="pt-4 sm:pt-6 space-y-4">
-                    <h3 className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-3">Payment Method</h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <button
-                        onClick={() => setSelectedPaymentMethod('credit_debit')}
-                        className={`flex items-center justify-center space-x-2 p-4 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors duration-200 ${selectedPaymentMethod === 'credit_debit' ? 'ring-2 ring-orange-500' : ''}`}
-                      >
-                        <CreditCard className="h-6 w-6" />
-                        <span>Credit/Debit Card</span>
-                      </button>
-                      <button
-                        onClick={() => setSelectedPaymentMethod('upi')}
-                        className={`flex items-center justify-center space-x-2 p-4 rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-colors duration-200 ${selectedPaymentMethod === 'upi' ? 'ring-2 ring-orange-500' : ''}`}
-                      >
-                        <QrCode className="h-6 w-6" />
-                        <span>UPI</span>
-                      </button>
-                    </div>
-                  </div>
-
                   <Button
                     className="w-full bg-orange-500 hover:bg-orange-600 text-white text-sm sm:text-base mt-4"
-                    size="lg"
-                    disabled={!selectedPaymentMethod}
-                  >
+                    size="lg">
                     <CreditCard className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                     Purchase Now
                   </Button>

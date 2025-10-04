@@ -79,7 +79,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full bg-purple-600 dark:bg-gray-900 z-50 shadow-lg">
+    <nav className="fixed top-0 w-full bg-teal-500 dark:bg-gray-900 z-50 shadow-lg">
       <div className="max-w-7xl mx-auto px-0 sm:px-2 lg:px-4">
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Left side - Logo and Know How */}

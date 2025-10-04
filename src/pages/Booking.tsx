@@ -11,8 +11,7 @@ const Booking = () => {
   const [participants, setParticipants] = useState(1);
   const [selectedCombo, setSelectedCombo] = useState<{ id: string; name: string; price: number; type: 'specific' | 'any' | 'special'; limit?: number; activities?: string[]; } | null>(null);
   const [selectedIndividualActivities, setSelectedIndividualActivities] = useState<string[]>([]);
-  const [selectedHour24, setSelectedHour24] = useState(9); // 24-hour format: 9 (9 AM) to 19 (7 PM for 2-hour slot ending by 9 PM)
-  const [selectedMinute, setSelectedMinute] = useState(0);
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
   const location = useLocation();
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
   const [specialActivityPeople, setSpecialActivityPeople] = useState(1);
@@ -155,142 +154,24 @@ const allSelectedActivitiesDetailed = useMemo(() => {
     return currentTotal;
 }, [getActivitiesInCurrentSelection.basePrice, allSelectedActivitiesDetailed, selectedCombo]);
 
-  // Helper function to format hour for display (12-hour format) and determine meridiem
-  const formatHour = (hour24: number) => {
-    let displayHour = hour24;
-    let meridiem = 'AM';
-    if (hour24 >= 12) {
-      meridiem = 'PM';
-      if (hour24 > 12) {
-        displayHour = hour24 - 12;
-      }
-    } else if (hour24 === 0) { // Should not happen with 9-19 range, but good practice
-      displayHour = 12;
+  // Time slot configuration based on selected combo/activity
+  const getTimeSlots = () => {
+    if (selectedCombo?.id === 'jewellery_lab') {
+      return ['11am-1pm', '1-3pm', '3-5pm', '5-7pm', '7-9pm'];
+    } else if (selectedCombo?.id === 'tuft_kidding') {
+      return ['11am-1:30pm', '2-4:30pm', '5-7:30pm'];
+    } else {
+      // Default time slots for all other activities
+      return ['11am-1pm', '1-3pm', '3-5pm', '5-8pm'];
     }
-    return { displayHour, meridiem };
   };
 
-  // Helper function to format minutes for display
-  const formatMinute = (minute: number) => {
-    return minute.toString().padStart(2, '0');
-  };
-
-  // Effect to update selectedTime string for display
+  // Update selectedTime when time slot changes
   useEffect(() => {
-    const startHourInfo = formatHour(selectedHour24);
-    const endHour24 = selectedHour24 + 2;
-    const endHourInfo = formatHour(endHour24 > 21 ? 21 : endHour24); // Cap end time at 9 PM (21)
-
-    const formattedStartMinute = formatMinute(selectedMinute);
-    let formattedEndMinute = formattedStartMinute; // Assuming minutes don't change over the 2-hour slot
-
-    setSelectedTime(
-      `${startHourInfo.displayHour}:${formattedStartMinute} ${startHourInfo.meridiem} - ` +
-      `${endHourInfo.displayHour}:${formattedEndMinute} ${endHourInfo.meridiem}`
-    );
-  }, [selectedHour24, selectedMinute]);
-
-  const handleHourIncrement = (increment: number) => {
-    setSelectedHour24(prevHour => {
-      let newHour = prevHour + increment;
-      // Keep within 9 AM (9) to 7 PM (19) for start hour (ensures 2-hour slot ends by 9 PM)
-      if (newHour < 9) {
-        return 19; // Loop back from 9 AM to 7 PM
-      } else if (newHour > 19) {
-        return 9; // Loop forward from 7 PM to 9 AM
-      }
-      return newHour;
-    });
-  };
-
-  const handleMinuteIncrement = (increment: number) => {
-    setSelectedMinute(prevMinute => {
-      let newMinute = prevMinute + increment;
-      if (newMinute >= 60) {
-        newMinute = 0;
-      } else if (newMinute < 0) {
-        newMinute = 45;
-      }
-      return newMinute;
-    });
-  };
-
-  const handleHourInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = parseInt(e.target.value, 10);
-    if (isNaN(value)) {
-      return; // Don't update if not a number
+    if (selectedTimeSlot) {
+      setSelectedTime(selectedTimeSlot);
     }
-
-    let newHour24 = value;
-    const currentMeridiem = formatHour(selectedHour24).meridiem;
-
-    if (value === 12) { // User typed 12
-      if (currentMeridiem === 'AM') newHour24 = 0; // This will be clamped to 9 AM later
-      else newHour24 = 12; // 12 PM
-    } else if (currentMeridiem === 'PM' && value >= 1 && value <= 11) {
-      newHour24 = value + 12;
-    } else if (currentMeridiem === 'AM' && value >= 1 && value <= 11) {
-      newHour24 = value;
-    }
-    
-    setSelectedHour24(newHour24);
-  };
-
-  const handleHourInputBlur = () => {
-    setSelectedHour24(prevHour => {
-      let newHour = prevHour;
-      // Clamp to 9 AM (9) to 7 PM (19)
-      if (newHour < 9) newHour = 9;
-      if (newHour > 19) newHour = 19;
-
-      // Special case: if user typed 12 AM (0) and then shifted to AM, it should be 9 AM
-      if (formatHour(newHour).displayHour === 12 && formatHour(newHour).meridiem === 'AM' && newHour === 0) {
-          newHour = 9; // Clamp 12 AM (0) to 9 AM (minimum allowed)
-      }
-      return newHour;
-    });
-  };
-
-  const handleMinuteInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = parseInt(e.target.value, 10);
-    if (isNaN(value)) {
-      return; // Don't update if not a number
-    }
-    setSelectedMinute(value); // Temporarily set minute, rounding will happen onBlur
-  };
-
-  const handleMinuteInputBlur = () => {
-    setSelectedMinute(prevMinute => {
-      let newMinute = prevMinute;
-      // Clamp 0-59
-      if (newMinute < 0) newMinute = 0;
-      if (newMinute > 59) newMinute = 59;
-      // Round to nearest 15
-      newMinute = Math.round(newMinute / 15) * 15;
-      if (newMinute === 60) newMinute = 0; // Handle rounding up to 60 minutes
-
-      return newMinute;
-    });
-  };
-
-  const handleMeridiemToggle = (targetMeridiem: 'AM' | 'PM') => {
-    setSelectedHour24(prevHour => {
-      const currentMeridiem = prevHour >= 12 && prevHour <= 19 ? 'PM' : 'AM'; // Adjusted PM check for allowed range
-
-      if (targetMeridiem === 'AM' && currentMeridiem === 'PM') {
-        // If currently PM and switching to AM
-        let newHour = prevHour - 12;
-        if (newHour < 9) newHour = 9; // Ensure it's within allowed range
-        return newHour;
-      } else if (targetMeridiem === 'PM' && currentMeridiem === 'AM') {
-        // If currently AM and switching to PM
-        let newHour = prevHour + 12;
-        if (newHour > 19) newHour = 19; // Ensure it's within allowed range
-        return newHour;
-      }
-      return prevHour; // No change if already in target meridiem or logic doesn't apply
-    });
-  };
+  }, [selectedTimeSlot]);
 
   const handleBooking = () => {
     if (!userDetails.name || !userDetails.email || !userDetails.phone || !userDetails.countryCode) {
@@ -298,7 +179,7 @@ const allSelectedActivitiesDetailed = useMemo(() => {
       return;
     }
     
-    if (!selectedDate || !selectedTime || !selectedPayment) {
+    if (!selectedDate || !selectedTimeSlot || !selectedPayment) {
       alert('Please fill in all required fields');
       return;
     }
@@ -633,116 +514,21 @@ const allSelectedActivitiesDetailed = useMemo(() => {
                 <span className="w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center text-orange-600 dark:text-orange-400 mr-3 text-sm font-bold">5</span>
                 Select Time Slot
               </h2>
-              <p className="text-sm text-red-600 dark:text-red-300 mb-4 text-center">Open from 9 AM to 9 PM</p>
-              <div className="flex items-center justify-center space-x-4 bg-white dark:bg-gray-700 p-6 rounded-2xl shadow-md border border-gray-200 dark:border-gray-600">
-                {/* Hours */}
-                <div className="flex flex-col items-center">
-                  <span className="mb-2 text-sm text-gray-600 dark:text-gray-300">Hours</span>
-                  <div className="relative w-24 h-28 flex flex-col items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-600 overflow-hidden">
-                    <button
-                      onClick={() => handleHourIncrement(1)}
-                      className="absolute top-0 inset-x-0 h-1/3 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 text-2xl font-bold cursor-pointer transition-colors"
-                    >
-                      ▲
-                    </button>
-                    <input
-                      type="number"
-                      value={formatHour(selectedHour24).displayHour}
-                      onChange={handleHourInputChange}
-                      onBlur={handleHourInputBlur}
-                      className="text-4xl font-bold text-gray-800 dark:text-white text-center w-full bg-transparent border-none focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      min="1"
-                      max="12"
-                    />
-                    <button
-                      onClick={() => handleHourIncrement(-1)}
-                      className="absolute bottom-0 inset-x-0 h-1/3 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 text-2xl font-bold cursor-pointer transition-colors"
-                    >
-                      ▼
-                    </button>
-                  </div>
-                </div>
-
-                <span className="text-4xl font-bold text-gray-800 dark:text-white">:</span>
-
-                {/* Minutes */}
-                <div className="flex flex-col items-center">
-                  <span className="mb-2 text-sm text-gray-600 dark:text-gray-300">Minutes</span>
-                  <div className="relative w-24 h-28 flex flex-col items-center justify-center rounded-lg border-2 border-gray-200 dark:border-gray-600 bg-gray-100 dark:bg-gray-600 overflow-hidden">
-                    <button
-                      onClick={() => handleMinuteIncrement(15)}
-                      className="absolute top-0 inset-x-0 h-1/3 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 text-2xl font-bold cursor-pointer transition-colors"
-                    >
-                      ▲
-                    </button>
-                    <input
-                      type="number"
-                      value={formatMinute(selectedMinute)}
-                      onChange={handleMinuteInputChange}
-                      onBlur={handleMinuteInputBlur}
-                      className="text-4xl font-bold text-gray-800 dark:text-white text-center w-full bg-transparent border-none focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      min="0"
-                      max="59"
-                    />
-                    <button
-                      onClick={() => handleMinuteIncrement(-15)}
-                      className="absolute bottom-0 inset-x-0 h-1/3 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 text-2xl font-bold cursor-pointer transition-colors"
-                    >
-                      ▼
-                    </button>
-                  </div>
-                </div>
-
-                {/* AM/PM buttons */}
-                <div className="flex flex-col space-y-2 ml-4 h-28 justify-center">
+              <p className="text-sm text-red-600 dark:text-red-300 mb-4 text-center">Open from 11 AM to 9 PM</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {getTimeSlots().map((slot) => (
                   <button
-                    onClick={() => handleMeridiemToggle('AM')}
-                    className={`py-3 px-6 rounded-full border-2 transition-all text-base font-medium ${
-                      formatHour(selectedHour24).meridiem === 'AM'
+                    key={slot}
+                    onClick={() => setSelectedTimeSlot(slot)}
+                    className={`p-4 rounded-xl border-2 transition-all hover:shadow-md text-center ${
+                      selectedTimeSlot === slot
                         ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 shadow-md'
-                        : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-400 bg-white dark:bg-gray-700'
+                        : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-400 bg-white dark:bg-gray-700 text-gray-800 dark:text-white'
                     }`}
                   >
-                    AM
+                    <span className="font-semibold text-lg">{slot}</span>
                   </button>
-                  <button
-                    onClick={() => handleMeridiemToggle('PM')}
-                    className={`py-3 px-6 rounded-full border-2 transition-all text-base font-medium ${
-                      formatHour(selectedHour24).meridiem === 'PM'
-                        ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 shadow-md'
-                        : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-400 bg-white dark:bg-gray-700'
-                    }`}
-                  >
-                    PM
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Payment Method */}
-            <div>
-              <h2 className="text-xl font-semibold mb-4 flex items-center text-gray-800 dark:text-white">
-                <span className="w-8 h-8 bg-orange-100 dark:bg-orange-900 rounded-full flex items-center justify-center text-orange-600 dark:text-orange-400 mr-3 text-sm font-bold">6</span>
-                Payment Method
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {paymentMethods.map((method) => {
-                  const IconComponent = method.icon;
-                  return (
-                    <button
-                      key={method.id}
-                      onClick={() => setSelectedPayment(method.id)}
-                      className={`p-4 rounded-xl border-2 flex items-center space-x-3 transition-all hover:shadow-md ${
-                        selectedPayment === method.id
-                          ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/30 shadow-md'
-                          : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 dark:hover:border-orange-400 bg-white dark:bg-gray-700'
-                      }`}
-                    >
-                      <IconComponent className="w-6 h-6 text-gray-600 dark:text-gray-300" />
-                      <span className="font-medium text-gray-800 dark:text-white">{method.name}</span>
-                    </button>
-                  );
-                })}
+                ))}
               </div>
             </div>
 
@@ -772,6 +558,23 @@ const allSelectedActivitiesDetailed = useMemo(() => {
                         <span>₹{activity.price}</span>
                       </div>
                     ))
+                )}
+                {selectedDate && (
+                  <div className="flex justify-between text-gray-700 dark:text-gray-300">
+                    <span>Date</span>
+                    <span>{new Date(selectedDate).toLocaleDateString('en-US', { 
+                      weekday: 'long', 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric' 
+                    })}</span>
+                  </div>
+                )}
+                {selectedTimeSlot && (
+                  <div className="flex justify-between text-gray-700 dark:text-gray-300">
+                    <span>Time Slot</span>
+                    <span>{selectedTimeSlot}</span>
+                  </div>
                 )}
                   <div className="border-t border-orange-200 dark:border-orange-600 pt-3 flex justify-between font-bold text-xl text-gray-800 dark:text-white">
                     <span>Total</span>
