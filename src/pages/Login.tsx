@@ -9,9 +9,9 @@ const Login = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loginData, setLoginData] = useState({ emailOrPhone: '', password: '' });
+  const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signupData, setSignupData] = useState({
-    name: '', emailOrPhone: '', password: '', confirmPassword: ''
+    name: '', email: '', password: '', confirmPassword: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -20,22 +20,19 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!loginData.emailOrPhone || !loginData.password) {
+    if (!loginData.email || !loginData.password) {
       return;
     }
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      // Check if it's admin login (email only for admin)
-      if (loginData.emailOrPhone === ADMIN_EMAIL && loginData.password === ADMIN_PASSWORD) {
+      if (loginData.email === ADMIN_EMAIL && loginData.password === ADMIN_PASSWORD) {
         localStorage.removeItem('userName');
         localStorage.setItem('isAdmin', 'true');
         navigate('/admin/dashboard/bookings', { replace: true });
         return;
       }
-      // For regular users, extract name from email or use phone number
-      const isEmail = loginData.emailOrPhone.includes('@');
-      const name = isEmail ? loginData.emailOrPhone.split('@')[0] : `User_${loginData.emailOrPhone.slice(-4)}`;
+      const name = loginData.email.split('@')[0];
       localStorage.setItem('userName', name);
       localStorage.removeItem('isAdmin');
       setUserName(name);
@@ -46,7 +43,7 @@ const Login = () => {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!signupData.name || !signupData.emailOrPhone || !signupData.password || !signupData.confirmPassword) {
+    if (!signupData.name || !signupData.email || !signupData.password || !signupData.confirmPassword) {
       return;
     }
     if (signupData.password !== signupData.confirmPassword) {
@@ -100,12 +97,12 @@ const Login = () => {
 
               <form onSubmit={handleLogin} className="space-y-6">
                 <div className="relative">
-                  <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
-                    type="text"
-                    name="emailOrPhone"
-                    placeholder="Email address or Phone number"
-                    value={loginData.emailOrPhone}
+                    type="email"
+                    name="email"
+                    placeholder="Email address"
+                    value={loginData.email}
                     onChange={handleLoginInputChange}
                     className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none transition-colors"
                     required
@@ -230,12 +227,12 @@ const Login = () => {
                 </div>
 
                 <div className="relative">
-                  <UserCheck className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
-                    type="text"
-                    name="emailOrPhone"
-                    placeholder="Email address or Phone number"
-                    value={signupData.emailOrPhone}
+                    type="email"
+                    name="email"
+                    placeholder="Email address"
+                    value={signupData.email}
                     onChange={handleSignupInputChange}
                     className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors"
                     required
